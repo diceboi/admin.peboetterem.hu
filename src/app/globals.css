@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root { 
+  --navy: #2a2d36; 
+  --navyblur: #2a2d36c7; 
+  --okker: #dcad4d; 
+  --okkerdark:#ffbb34; 
+  --grey: #dadada; 
+  --alert: #c4281a; 
+  --lightnavy: #3a3f47;
+} 
+
+body { 
+  font-family: var(--font-inter); 
+}
+
+.font-bebas {
+  font-family: var(--font-bebas);
+}
+
+h1 {
+  font-family: var(--font-bebas);
+  font-size: x-large;
+}
+
+h2 {
+  font-family: var(--font-inter);
+  font-weight: 700;
+}
+
+.shadow-box {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
