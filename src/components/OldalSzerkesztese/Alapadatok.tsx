@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 const getAlapadatok = async () => {
     try {
-        const res = await fetch('/api/alapadatok', { next: { revalidate: 0 } });
+        const res = await fetch('/api/alapadatok');
 
         if (!res.ok) {
             throw new Error("Az adatok letöltése nem sikerült");
@@ -52,9 +52,6 @@ const Alapadatok = () => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                next: { 
-                    revalidate: 0 
                 },
                 body: JSON.stringify({ newTitle: currentItem.title, newData }),
             });
