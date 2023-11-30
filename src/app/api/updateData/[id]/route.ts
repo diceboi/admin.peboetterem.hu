@@ -1,3 +1,5 @@
+"use server"
+
 import Alapadatok from "@/modals/alapadatok";
 import { NextResponse } from "next/server";
 
