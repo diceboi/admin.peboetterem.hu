@@ -1,9 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const AlapadatokSchema = new mongoose.Schema(
   {
-      title: String,
-      data: String,
+      newData: String,
   },
   {
       timestamps: true,

@@ -46,29 +46,30 @@ const Alapadatok = () => {
         setEditMode(newEditMode);
     };
 
-    const handleSave = async (index: number, id: string, newData: string, currentItem: any) => {
+    const handleSave = async (index: number, id: string, title: string, currentItem: any) => {
         try {
-            const res = await fetch(`/api/updateData/${id}`, {
+            const updatedData = [...alapadatok];
+            const newData = updatedData[index].data; // Get the updated data from state
+    
+            const res = await fetch(`/api/updateAlapadatok/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ newTitle: currentItem.title, newData }),
+                body: JSON.stringify({ newData }), // Ensure sending as object
             });
-
+    
             if (!res.ok) {
                 throw new Error('Failed to update data');
             }
-            
+    
             // Log the data sent to the backend
-            console.log('Data sent to backend:', { newTitle: currentItem.title, newData });
+            console.log('Data sent to backend:', { newData });
     
             // If the backend successfully updates the data, update the frontend state
-            const updatedData = [...alapadatok];
             updatedData[index].data = newData; // Update the specific item's data
-
             setAlapadatok(updatedData);
-
+    
             // Disable edit mode and reset the button after successful update
             const newEditMode = [...editMode];
             newEditMode[index] = false;
@@ -77,6 +78,8 @@ const Alapadatok = () => {
             console.error('Error updating data:', error);
         }
     };
+    
+    
 
   return (
     <section className='flex flex-col w-full h-auto shadow-box p-8 rounded-xl'>
@@ -90,7 +93,7 @@ const Alapadatok = () => {
             <>
 
             {alapadatok.map((item, index) => (
-                <div className='flex items-center gap-4' key={item._id}>
+                <div className='flex items-center gap-4' key={item.id}>
                     <h2 className='w-96'>{item.title}:</h2>
                     <input
                         disabled={!editMode[index]} // Enable/disable based on edit mode
@@ -110,7 +113,7 @@ const Alapadatok = () => {
                         {!editMode[index] ? (
                             <EditButton onClick={() => handleEdit(index)} />
                         ) : (
-                            <SaveButton onClick={() => handleSave(index, item._id, item.data, item)} />
+                            <SaveButton onClick={() => handleSave(index, item._id, item.title, item)} />
                         )}
                     </div>
                 </div>
