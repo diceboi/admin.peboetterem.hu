@@ -9,11 +9,11 @@ export async function PUT(request:any, { params }:any) {
   const { newData: data } = await request.json();
 
   try {
+    console.log(`Updating document with id: ${id}`);
     await Alapadatok.findByIdAndUpdate(id, { data });
+    console.log(`Document with id: ${id} updated successfully.`);
     return NextResponse.json({ message: "Topic updated" }, { status: 200 });
   } catch (error) {
-    // It is a good practice to handle any potential errors that could occur
-    // during the database operation.
     console.error("Failed to update the document:", error);
     return NextResponse.json({ message: "Failed to update the document" }, { status: 500 });
   }
