@@ -10,7 +10,7 @@ export async function PUT(request:any, { params }:any) {
 
   try {
     console.log(`Updating document with id: ${id}`);
-    await Alapadatok.findByIdAndUpdate(id, { data });
+    await Alapadatok.findByIdAndUpdate(id, { data }, { new: true });
     console.log(`Document with id: ${id} updated successfully.`);
     return NextResponse.json({ message: "Topic updated" }, { status: 200 });
   } catch (error) {

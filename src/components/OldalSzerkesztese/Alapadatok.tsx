@@ -3,6 +3,7 @@
 import EditButton from './UI/EditButton'
 import SaveButton from './UI/SaveButton';
 import { useEffect, useState } from 'react';
+import connectMongoDB from '@/lib/mongodb';
 
 const getAlapadatok = async () => {
     try {
@@ -48,6 +49,7 @@ const Alapadatok = () => {
 
     const handleSave = async (index: number, id: string, title: string, currentItem: any) => {
         try {
+            await connectMongoDB();
             const updatedData = [...alapadatok];
             const newData = updatedData[index].data; // Get the updated data from state
     
