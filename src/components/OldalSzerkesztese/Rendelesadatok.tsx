@@ -1,6 +1,6 @@
 import React from 'react'
-import DeleteButton from './UI/DeleteButton'
-import EditButton from './UI/EditButton'
+import DeleteButton from '../UI/DeleteButton'
+import EditButton from '../UI/EditButton'
 
 export default function RendelesAdatok() {
   return (

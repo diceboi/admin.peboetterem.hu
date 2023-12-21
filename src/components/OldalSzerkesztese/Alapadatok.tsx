@@ -1,13 +1,12 @@
 "use client"
 
-import EditButton from './UI/EditButton'
-import SaveButton from './UI/SaveButton';
+import EditButton from '../UI/EditButton'
+import SaveButton from '../UI/SaveButton';
 import { useEffect, useState } from 'react';
-import connectMongoDB from '@/lib/mongodb';
 
 const getAlapadatok = async () => {
     try {
-        const res = await fetch('/api/alapadatok');
+        const res = await fetch('/api/alapadatok', { cache: 'no-store' });
 
         if (!res.ok) {
             throw new Error("Az adatok letöltése nem sikerült");
@@ -47,9 +46,8 @@ const Alapadatok = () => {
         setEditMode(newEditMode);
     };
 
-    const handleSave = async (index: number, id: string, title: string, currentItem: any) => {
+    const handleSave = async (index: number, id: string) => {
         try {
-            await connectMongoDB();
             const updatedData = [...alapadatok];
             const newData = updatedData[index].data; // Get the updated data from state
     
@@ -95,7 +93,7 @@ const Alapadatok = () => {
             <>
 
             {alapadatok.map((item, index) => (
-                <div className='flex items-center gap-4' key={item.id}>
+                <div className='flex items-center gap-4' key={item._id}>
                     <h2 className='w-96'>{item.title}:</h2>
                     <input
                         disabled={!editMode[index]} // Enable/disable based on edit mode
@@ -115,7 +113,7 @@ const Alapadatok = () => {
                         {!editMode[index] ? (
                             <EditButton onClick={() => handleEdit(index)} />
                         ) : (
-                            <SaveButton onClick={() => handleSave(index, item._id, item.title, item)} />
+                            <SaveButton onClick={() => handleSave(index, item._id)} />
                         )}
                     </div>
                 </div>

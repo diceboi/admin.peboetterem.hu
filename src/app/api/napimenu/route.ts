@@ -1,11 +1,11 @@
 import connectMongoDB from "@/lib/mongodb";
-import Alapadatok from "@/modals/alapadatok"
+import Napimenu from "@/modals/napimenu"
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
     await connectMongoDB();
-    const alapadatok = await Alapadatok.find();
-    return NextResponse.json({ data: { Alapadatok: alapadatok } })
+    const napimenu = await Napimenu.find();
+    return NextResponse.json({ data: { Napimenu: napimenu } })
 }
