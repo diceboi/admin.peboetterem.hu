@@ -13,7 +13,7 @@ export async function PUT(req:any, { params }:any) {
     const response = await Napimenu.findOneAndUpdate({_id: id}, updatedData );
     console.log(`Document with id: ${id} updated successfully.`);
     console.log(response);
-    return NextResponse.json({ message: "Napimenu updated" }, { status: 200 });
+    return NextResponse.json({ message: "Napimenu frissítve" }, { status: 200 });
   } catch (error) {
     console.error("Failed to update the document:", error);
     return NextResponse.json({ message: "Failed to update the document" }, { status: 500 });

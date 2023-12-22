@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const AlapadatokSchema = new mongoose.Schema(
   {
-      newData: String,
+      data: String,
   },
   {
       timestamps: true,

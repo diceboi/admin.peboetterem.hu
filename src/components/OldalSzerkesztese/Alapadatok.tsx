@@ -1,6 +1,5 @@
 "use client"
 
-import EditButton from '../UI/EditButton'
 import SaveButton from '../UI/SaveButton';
 import { useEffect, useState } from 'react';
 
@@ -11,7 +10,7 @@ const getAlapadatok = async () => {
         if (!res.ok) {
             throw new Error("Az adatok letöltése nem sikerült");
         }
-
+        console.log(res);
         return res.json();
     } catch (error) {
         console.log("Az adatok betöltése sikertlen", error);
@@ -22,7 +21,6 @@ const getAlapadatok = async () => {
 const Alapadatok = () => {
 
     const [alapadatok, setAlapadatok] = useState<any[]>([]);
-    const [editMode, setEditMode] = useState<boolean[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,46 +37,29 @@ const Alapadatok = () => {
         };
         fetchData();
     }, []);
-
-    const handleEdit = (index: number) => {
-        const newEditMode = [...editMode];
-        newEditMode[index] = true; // Enable edit mode for the clicked item
-        setEditMode(newEditMode);
-    };
-
-    const handleSave = async (index: number, id: string) => {
+    
+    const handleSave = async () => {
         try {
-            const updatedData = [...alapadatok];
-            const newData = updatedData[index].data; // Get the updated data from state
-    
-            const res = await fetch(`/api/updateAlapadatok/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ newData }), // Ensure sending as object
+            const res = await fetch('/api/updateAlapadatok/', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ alapadatok }),
             });
-    
-            if (!res.ok) {
-                throw new Error('Failed to update data');
-            }
-    
-            // Log the data sent to the backend
-            console.log('Data sent to backend:', { newData });
-    
-            // If the backend successfully updates the data, update the frontend state
-            updatedData[index].data = newData; // Update the specific item's data
-            setAlapadatok(updatedData);
-    
-            // Disable edit mode and reset the button after successful update
-            const newEditMode = [...editMode];
-            newEditMode[index] = false;
-            setEditMode(newEditMode);
+
+            const data = await res.json();
+            console.log(data); // Handle success or error
         } catch (error) {
             console.error('Error updating data:', error);
         }
     };
-    
+
+    const handleInputChange = (index: number, value: string) => {
+        const updatedData = [...alapadatok];
+        updatedData[index].data = value;
+        setAlapadatok(updatedData);
+    };
     
 
   return (
@@ -96,26 +77,11 @@ const Alapadatok = () => {
                 <div className='flex items-center gap-4' key={item._id}>
                     <h2 className='w-96'>{item.title}:</h2>
                     <input
-                        disabled={!editMode[index]} // Enable/disable based on edit mode
                         type='text'
                         value={item.data}
-                        className={`p-2 w-full transition-all ${
-                            editMode[index] ? ' bg-green-100' : 'bg-neutral-100'
-                        }`}
-                        onChange={(e) => {
-                            const newData = e.target.value;
-                            const updatedData = [...alapadatok];
-                            updatedData[index].data = newData;
-                            setAlapadatok(updatedData);
-                        }}
+                        className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
+                        onChange={(e) => handleInputChange(index, e.target.value)}
                     />
-                    <div className='flex justify-center items-center'>
-                        {!editMode[index] ? (
-                            <EditButton onClick={() => handleEdit(index)} />
-                        ) : (
-                            <SaveButton onClick={() => handleSave(index, item._id)} />
-                        )}
-                    </div>
                 </div>
             ))}
 
@@ -123,6 +89,7 @@ const Alapadatok = () => {
         )}
 
         </div>
+        <SaveButton buttontxt={"Mentés"} onClick={handleSave} />
     </section>
   )
 }
