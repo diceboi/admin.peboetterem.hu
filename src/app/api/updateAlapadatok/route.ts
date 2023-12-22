@@ -5,11 +5,11 @@ import { NextResponse } from "next/server";
 export async function PUT(req:any) {
   await connectMongoDB(); // This should be done before updating documents
 
-  const { alapadatok } = await req.json();
+  const { id, alapadatok } = await req.json();
 
   try {
-    const response = await Alapadatok.updateMany({ alapadatok });
-    console.log(response);
+    const response = await Alapadatok.findOneAndUpdate({_id: id}, alapadatok[0] );
+    console.log(alapadatok[0]);
     return NextResponse.json({ message: "Alapadatok frissítve" }, { status: 200 });
   } catch (error) {
     console.error("Failed to update the document:", error);

@@ -37,6 +37,8 @@ const Alapadatok = () => {
         };
         fetchData();
     }, []);
+
+    const id = alapadatok[0]?._id;
     
     const handleSave = async () => {
         try {
@@ -45,7 +47,7 @@ const Alapadatok = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ alapadatok }),
+            body: JSON.stringify({ id ,alapadatok }),
             });
 
             const data = await res.json();
@@ -55,9 +57,13 @@ const Alapadatok = () => {
         }
     };
 
-    const handleInputChange = (index: number, value: string) => {
-        const updatedData = [...alapadatok];
-        updatedData[index].data = value;
+    const handleInputChange = (name: string, value: string) => {
+        const updatedData = alapadatok.map(item => {
+            if (item.hasOwnProperty(name)) {
+                return { ...item, [name]: value };
+            }
+            return item;
+        });
         setAlapadatok(updatedData);
     };
     
@@ -69,24 +75,60 @@ const Alapadatok = () => {
         </div>
         <div className='flex flex-col gap-4 py-8'>
 
-        {alapadatok && alapadatok.length > 0 && (
-            
-            <>
-
-            {alapadatok.map((item, index) => (
-                <div className='flex items-center gap-4' key={item._id}>
-                    <h2 className='w-96'>{item.title}:</h2>
+                <div className='flex items-center gap-4'>
+                    <h2 className='w-96'>Mobiltelefonszám:</h2>
                     <input
                         type='text'
-                        value={item.data}
+                        value={alapadatok[0]?.mobil || ''}
+                        placeholder={alapadatok[0]?.mobil || ''}
                         className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
-                        onChange={(e) => handleInputChange(index, e.target.value)}
+                        onChange={(e) => handleInputChange('mobil', e.target.value)}
                     />
                 </div>
-            ))}
 
-            </>
-        )}
+                <div className='flex items-center gap-4'>
+                    <h2 className='w-96'>Vezetékes:</h2>
+                    <input
+                        type='text'
+                        value={alapadatok[0]?.vezetekes || ''}
+                        placeholder={alapadatok[0]?.vezetekes || ''}
+                        className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
+                        onChange={(e) => handleInputChange('vezetekes', e.target.value)}
+                    />
+                </div>
+
+                <div className='flex items-center gap-4'>
+                    <h2 className='w-96'>Email:</h2>
+                    <input
+                        type='text'
+                        value={alapadatok[0]?.email || ''}
+                        placeholder={alapadatok[0]?.email || ''}
+                        className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
+                        onChange={(e) => handleInputChange('email', e.target.value)}
+                    />
+                </div>
+
+                <div className='flex items-center gap-4'>
+                    <h2 className='w-96'>Cím:</h2>
+                    <input
+                        type='text'
+                        value={alapadatok[0]?.cim || ''}
+                        placeholder={alapadatok[0]?.cim || ''}
+                        className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
+                        onChange={(e) => handleInputChange('cim', e.target.value)}
+                    />
+                </div>
+
+                <div className='flex items-center gap-4'>
+                    <h2 className='w-96'>Facebook cím:</h2>
+                    <input
+                        type='text'
+                        value={alapadatok[0]?.facebook || ''}
+                        placeholder={alapadatok[0]?.facebook || ''}
+                        className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
+                        onChange={(e) => handleInputChange('facebook', e.target.value)}
+                    />
+                </div>
 
         </div>
         <SaveButton buttontxt={"Mentés"} onClick={handleSave} />

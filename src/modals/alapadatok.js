@@ -2,7 +2,11 @@ import mongoose, { Schema } from "mongoose";
 
 const AlapadatokSchema = new mongoose.Schema(
   {
-      data: String,
+      cim: String,
+      email: String,
+      facebook: String,
+      mobil: String,
+      vezetekes: String,
   },
   {
       timestamps: true,
