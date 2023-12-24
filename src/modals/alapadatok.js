@@ -7,6 +7,9 @@ const AlapadatokSchema = new mongoose.Schema(
       facebook: String,
       mobil: String,
       vezetekes: String,
+      nyitvatartashepe: String,
+      nyitvatartasszo: String,
+      nyitvatartasv: String,
   },
   {
       timestamps: true,

@@ -47,7 +47,7 @@ const Alapadatok = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id ,alapadatok }),
+            body: JSON.stringify({ id, alapadatok }),
             });
 
             const data = await res.json();
@@ -75,8 +75,8 @@ const Alapadatok = () => {
         </div>
         <div className='flex flex-col gap-4 py-8'>
 
-                <div className='flex items-center gap-4'>
-                    <h2 className='w-96'>Mobiltelefonszám:</h2>
+                <div className='flex flex-col lg:flex-row items-start lg:items-center gap-2'>
+                    <h2 className='w-auto lg:w-96'>Mobiltelefonszám:</h2>
                     <input
                         type='text'
                         value={alapadatok[0]?.mobil || ''}
@@ -86,7 +86,7 @@ const Alapadatok = () => {
                     />
                 </div>
 
-                <div className='flex items-center gap-4'>
+                <div className='flex flex-col lg:flex-row items-start lg:items-center gap-2'>
                     <h2 className='w-96'>Vezetékes:</h2>
                     <input
                         type='text'
@@ -97,7 +97,7 @@ const Alapadatok = () => {
                     />
                 </div>
 
-                <div className='flex items-center gap-4'>
+                <div className='flex flex-col lg:flex-row items-start lg:items-center gap-2'>
                     <h2 className='w-96'>Email:</h2>
                     <input
                         type='text'
@@ -108,7 +108,7 @@ const Alapadatok = () => {
                     />
                 </div>
 
-                <div className='flex items-center gap-4'>
+                <div className='flex flex-col lg:flex-row items-start lg:items-center gap-2'>
                     <h2 className='w-96'>Cím:</h2>
                     <input
                         type='text'
@@ -119,7 +119,7 @@ const Alapadatok = () => {
                     />
                 </div>
 
-                <div className='flex items-center gap-4'>
+                <div className='flex flex-col lg:flex-row items-start lg:items-center gap-2'>
                     <h2 className='w-96'>Facebook cím:</h2>
                     <input
                         type='text'
@@ -129,6 +129,54 @@ const Alapadatok = () => {
                         onChange={(e) => handleInputChange('facebook', e.target.value)}
                     />
                 </div>
+
+                <div className='flex flex-wrap items-center gap-4 border-t border-neutral-300 pt-4'>
+                    <h2 className='w-96'>Nyitvatartás:</h2>
+                    <div className='flex flex-col lg:flex-row w-full gap-4'>
+                        <div>
+                            <label htmlFor="hetfo-pentek">Hétfő - Péntek</label>
+                            <input
+                                type='text'
+                                value={alapadatok[0]?.nyitvatartashepe || ''}
+                                placeholder={alapadatok[0]?.nyitvatartashepe || ''}
+                                className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
+                                onChange={(e) => handleInputChange('nyitvatartashepe', e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="szombat">Szombat</label>
+                            <input
+                                type='text'
+                                value={alapadatok[0]?.nyitvatartasszo || ''}
+                                placeholder={alapadatok[0]?.nyitvatartasszo || ''}
+                                className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
+                                onChange={(e) => handleInputChange('nyitvatartasszo', e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="vasarnap">Vasárnap</label>
+                            <input
+                                type='text'
+                                value={alapadatok[0]?.nyitvatartasv || ''}
+                                placeholder={alapadatok[0]?.nyitvatartasv || ''}
+                                className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
+                                onChange={(e) => handleInputChange('nyitvatartasv', e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="vasarnap">Rendelésfelvétel</label>
+                            <input
+                                type='text'
+                                value={alapadatok[0]?.rendelesfelvetel || ''}
+                                placeholder={alapadatok[0]?.rendelesfelvetel || ''}
+                                className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
+                                onChange={(e) => handleInputChange('rendelesfelvetel', e.target.value)}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                
 
         </div>
         <SaveButton buttontxt={"Mentés"} onClick={handleSave} />

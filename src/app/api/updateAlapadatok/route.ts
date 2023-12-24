@@ -8,7 +8,7 @@ export async function PUT(req:any) {
   const { id, alapadatok } = await req.json();
 
   try {
-    const response = await Alapadatok.findOneAndUpdate({_id: id}, alapadatok[0] );
+    await Alapadatok.findOneAndUpdate({_id: id}, alapadatok[0] );
     console.log(alapadatok[0]);
     return NextResponse.json({ message: "Alapadatok frissítve" }, { status: 200 });
   } catch (error) {
