@@ -1,4 +1,4 @@
-import mongoose, { isObjectIdOrHexString } from "mongoose";
+import mongoose from "mongoose";
 
 const NapimenuSchema = new mongoose.Schema(
   {

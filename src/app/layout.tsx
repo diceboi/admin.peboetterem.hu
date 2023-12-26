@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Bebas_Neue, Inter, Playball } from 'next/font/google'
 import './globals.css'
 import { ApolloWrapper } from '@/lib/apollo-wrapper'
+import { Toaster } from 'sonner';
 
 import Nav from '@/components/UI/Nav'
 
@@ -39,6 +40,7 @@ export default function RootLayout({
         <div className='w-max-full'>
           <Nav />
           {children}
+          <Toaster richColors position="top-center" />
         </div>
       </body>
       </ApolloWrapper>

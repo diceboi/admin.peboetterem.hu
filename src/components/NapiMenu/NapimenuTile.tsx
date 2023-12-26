@@ -4,6 +4,7 @@ import { ObjectId } from "mongoose";
 import SaveButton from "../UI/SaveButton"
 
 import { useState } from "react"
+import { toast } from "sonner";
 
 export default function NapimenuTile({ id, day, date, aMenuLeves, aMenuFoetel, bMenuLeves, bMenuFoetel}:any) {
 
@@ -25,8 +26,14 @@ export default function NapimenuTile({ id, day, date, aMenuLeves, aMenuFoetel, b
             body: JSON.stringify({ updatedData }),
             });
 
-            const data = await res.json();
-            console.log(data); // Handle success or error
+            if (res.ok) {
+                toast.success('Sikeres frissítés');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } else {
+                toast.error('A frissítés nem sikerült');
+            }
         } catch (error) {
             console.error('Error updating data:', error);
         }

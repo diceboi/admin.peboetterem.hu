@@ -1,6 +1,7 @@
 "use client"
 
 import SaveButton from "../UI/SaveButton"
+import { toast } from "sonner";
 
 import { useState, useEffect } from "react"
 
@@ -77,9 +78,14 @@ export default function Etlaptile({ nev, kategoria, elsodlegesar, masodlagosar, 
             body: JSON.stringify({ updatedData }),
             });
 
-            const data = await res.json();
-            window.location.reload();
-            console.log(data); // Handle success or error
+            if (res.ok) {
+                toast.success('A termék sikeresen felkerült az étlapra.');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } else {
+                toast.error('A termékfelvitel nem sikerült.');
+            }
         } catch (error) {
             console.error('Error updating data:', error);
         }
@@ -107,8 +113,8 @@ export default function Etlaptile({ nev, kategoria, elsodlegesar, masodlagosar, 
                 </div>
                 <div className="flex items-center flex-wrap w-full lg:flex-nowrap border-b border-neutral-200 py-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full">
-                        <div className='flex items-center w-full gap-4'>
-                            <label htmlFor="elsodlegesar">Elsődleges&#10240;ár:</label> 
+                        <div className='flex items-center w-full'>
+                            <label className="mr-4" htmlFor="elsodlegesar">Elsődleges&#10240;ár:</label> 
                             <input
                                 id='elsodlegesar'
                                 type='text'
@@ -123,8 +129,8 @@ export default function Etlaptile({ nev, kategoria, elsodlegesar, masodlagosar, 
                             <div className='flex justify-center items-center'>
                             </div>
                         </div>
-                        <div className='flex items-center w-full gap-4'>
-                            <label htmlFor="elsoelotag">Előtag:</label> 
+                        <div className='flex items-center w-full '>
+                            <label className="mr-4" htmlFor="elsoelotag">Előtag:</label> 
                             <input
                                 id='elsoelotag'
                                 type='text'
@@ -143,8 +149,8 @@ export default function Etlaptile({ nev, kategoria, elsodlegesar, masodlagosar, 
                 </div>
                 <div className="flex items-center flex-wrap w-full lg:flex-nowrap border-b border-neutral-200 py-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full">
-                        <div className='flex items-center w-full gap-4'>
-                            <label htmlFor="masodlagosar">Másodlagos&#10240;ár:</label> 
+                        <div className='flex items-center w-full'>
+                            <label className="mr-4" htmlFor="masodlagosar">Másodlagos&#10240;ár:</label> 
                             <input
                                 id='masodlagosar'
                                 type='text'
@@ -159,8 +165,8 @@ export default function Etlaptile({ nev, kategoria, elsodlegesar, masodlagosar, 
                             <div className='flex justify-center items-center'>
                             </div>
                         </div>
-                        <div className='flex items-center w-full gap-4'>
-                            <label htmlFor="masodikelotag">Előtag:</label> 
+                        <div className='flex items-center w-full'>
+                            <label className="mr-4" htmlFor="masodikelotag">Előtag:</label> 
                             <input
                                 id='masodikelotag'
                                 type='text'
@@ -181,12 +187,13 @@ export default function Etlaptile({ nev, kategoria, elsodlegesar, masodlagosar, 
 
                 <div className="flex items-center flex-wrap w-full lg:flex-nowrap border-b border-neutral-200 py-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full">
-                        <div className='flex items-center w-full gap-4'>
-                            <label htmlFor="kategoria">Kategória:</label> 
+                        <div className='flex flex-col justify-center lg:flex-row w-full'>
+                            <label className="mr-4" htmlFor="kategoria">Kategória:</label> 
                             <select
                             id='kategoria'
                             value={updatedData.kategoria}
                             onChange={handleCategoryChange}
+                            className="border border-neutral-300 p-2 rounded-md mb-2 mr-0 lg:mb-0 lg:mr-2"
                             >
                             {categories.map((category) => (
                                 <option key={category} value={category}>
@@ -206,8 +213,8 @@ export default function Etlaptile({ nev, kategoria, elsodlegesar, masodlagosar, 
                             <div className='flex justify-center items-center'>
                             </div>
                         </div>
-                        <div className='flex items-center w-full gap-4'>
-                            <label htmlFor="allergenek">Allergének:</label> 
+                        <div className='flex items-center w-full'>
+                            <label className="mr-4" htmlFor="allergenek">Allergének:</label> 
                             <input
                                 id='allergenek'
                                 type='text'

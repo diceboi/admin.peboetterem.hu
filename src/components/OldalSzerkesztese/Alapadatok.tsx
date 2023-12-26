@@ -1,5 +1,6 @@
 "use client"
 
+import { toast } from 'sonner';
 import SaveButton from '../UI/SaveButton';
 import { useEffect, useState } from 'react';
 
@@ -50,8 +51,14 @@ const Alapadatok = () => {
             body: JSON.stringify({ id, alapadatok }),
             });
 
-            const data = await res.json();
-            console.log(data); // Handle success or error
+            if (res.ok) {
+                toast.success('Sikeres frissítés');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } else {
+                toast.error('A frissítés nem sikerült');
+            }
         } catch (error) {
             console.error('Error updating data:', error);
         }
