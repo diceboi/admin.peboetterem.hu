@@ -10,6 +10,7 @@ const AlapadatokSchema = new mongoose.Schema(
       nyitvatartashepe: String,
       nyitvatartasszo: String,
       nyitvatartasv: String,
+      rendelesfelvetel: String,
   },
   {
       timestamps: true,

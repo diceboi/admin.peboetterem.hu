@@ -2,77 +2,44 @@
 
 import { toast } from 'sonner';
 import SaveButton from '../UI/SaveButton';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-const getAlapadatok = async () => {
+export default function Alapadatok({ id, cim, email, facebook, mobil, vezetekes, nyitvatartashepe, nyitvatartasszo, nyitvatartasv, rendelesfelvetel }:any) {
+
+const [updatedData, setUpdatedData] = useState({
+    cim,
+    email,
+    facebook,
+    mobil,
+    vezetekes,
+    nyitvatartashepe,
+    nyitvatartasszo,
+    nyitvatartasv,
+    rendelesfelvetel
+    });
+
+const handleSave = async () => {
     try {
-        const res = await fetch('/api/alapadatok', { cache: 'no-store' });
-
-        if (!res.ok) {
-            throw new Error("Az adatok letöltése nem sikerült");
-        }
-        console.log(res);
-        return res.json();
-    } catch (error) {
-        console.log("Az adatok betöltése sikertlen", error);
-        return null;
-    }
-};  
-
-const Alapadatok = () => {
-
-    const [alapadatok, setAlapadatok] = useState<any[]>([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await getAlapadatok();
-                if (data && data.data && Array.isArray(data.data.Alapadatok)) {
-                    setAlapadatok(data.data.Alapadatok);
-                } else {
-                    throw new Error("Invalid data format received");
-                }
-            } catch (error) {
-                console.error("Error fetching or handling data:", error);
-            }
-        };
-        fetchData();
-    }, []);
-
-    const id = alapadatok[0]?._id;
-    
-    const handleSave = async () => {
-        try {
-            const res = await fetch('/api/updateAlapadatok/', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id, alapadatok }),
-            });
-
-            if (res.ok) {
-                toast.success('Sikeres frissítés');
-                setTimeout(() => {
-                    window.location.reload();
-                }, 3000);
-            } else {
-                toast.error('A frissítés nem sikerült');
-            }
-        } catch (error) {
-            console.error('Error updating data:', error);
-        }
-    };
-
-    const handleInputChange = (name: string, value: string) => {
-        const updatedData = alapadatok.map(item => {
-            if (item.hasOwnProperty(name)) {
-                return { ...item, [name]: value };
-            }
-            return item;
+        const res = await fetch(`/api/updateAlapadatok/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ updatedData }),
         });
-        setAlapadatok(updatedData);
-    };
+
+        if (res.ok) {
+            toast.success('Sikeres frissítés');
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        } else {
+            toast.error('A frissítés nem sikerült');
+        }
+    } catch (error) {
+        console.error('Error updating data:', error);
+    }
+};
     
 
   return (
@@ -86,10 +53,13 @@ const Alapadatok = () => {
                     <h2 className='w-auto lg:w-96'>Mobiltelefonszám:</h2>
                     <input
                         type='text'
-                        value={alapadatok[0]?.mobil || ''}
-                        placeholder={alapadatok[0]?.mobil || ''}
+                        value={updatedData.mobil}
+                        placeholder={mobil}
                         className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
-                        onChange={(e) => handleInputChange('mobil', e.target.value)}
+                        onChange={e => setUpdatedData(prevData => ({
+                            ...prevData,
+                            mobil: e.target.value // Update the specific field in the state
+                        }))}
                     />
                 </div>
 
@@ -97,10 +67,13 @@ const Alapadatok = () => {
                     <h2 className='w-96'>Vezetékes:</h2>
                     <input
                         type='text'
-                        value={alapadatok[0]?.vezetekes || ''}
-                        placeholder={alapadatok[0]?.vezetekes || ''}
+                        value={updatedData.vezetekes}
+                        placeholder={vezetekes}
                         className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
-                        onChange={(e) => handleInputChange('vezetekes', e.target.value)}
+                        onChange={e => setUpdatedData(prevData => ({
+                            ...prevData,
+                            vezetekes: e.target.value // Update the specific field in the state
+                        }))}
                     />
                 </div>
 
@@ -108,10 +81,13 @@ const Alapadatok = () => {
                     <h2 className='w-96'>Email:</h2>
                     <input
                         type='text'
-                        value={alapadatok[0]?.email || ''}
-                        placeholder={alapadatok[0]?.email || ''}
+                        value={updatedData.email}
+                        placeholder={email}
                         className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
-                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        onChange={e => setUpdatedData(prevData => ({
+                            ...prevData,
+                            email: e.target.value // Update the specific field in the state
+                        }))}
                     />
                 </div>
 
@@ -119,10 +95,13 @@ const Alapadatok = () => {
                     <h2 className='w-96'>Cím:</h2>
                     <input
                         type='text'
-                        value={alapadatok[0]?.cim || ''}
-                        placeholder={alapadatok[0]?.cim || ''}
+                        value={updatedData.cim}
+                        placeholder={cim}
                         className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
-                        onChange={(e) => handleInputChange('cim', e.target.value)}
+                        onChange={e => setUpdatedData(prevData => ({
+                            ...prevData,
+                            cim: e.target.value // Update the specific field in the state
+                        }))}
                     />
                 </div>
 
@@ -130,10 +109,13 @@ const Alapadatok = () => {
                     <h2 className='w-96'>Facebook cím:</h2>
                     <input
                         type='text'
-                        value={alapadatok[0]?.facebook || ''}
-                        placeholder={alapadatok[0]?.facebook || ''}
+                        value={updatedData.facebook}
+                        placeholder={facebook}
                         className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
-                        onChange={(e) => handleInputChange('facebook', e.target.value)}
+                        onChange={e => setUpdatedData(prevData => ({
+                            ...prevData,
+                            facebook: e.target.value // Update the specific field in the state
+                        }))}
                     />
                 </div>
 
@@ -144,40 +126,52 @@ const Alapadatok = () => {
                             <label htmlFor="hetfo-pentek">Hétfő - Péntek</label>
                             <input
                                 type='text'
-                                value={alapadatok[0]?.nyitvatartashepe || ''}
-                                placeholder={alapadatok[0]?.nyitvatartashepe || ''}
+                                value={updatedData.nyitvatartashepe}
+                                placeholder={nyitvatartashepe}
                                 className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
-                                onChange={(e) => handleInputChange('nyitvatartashepe', e.target.value)}
+                                onChange={e => setUpdatedData(prevData => ({
+                                    ...prevData,
+                                    nyitvatartashepe: e.target.value // Update the specific field in the state
+                                }))}
                             />
                         </div>
                         <div>
                             <label htmlFor="szombat">Szombat</label>
                             <input
                                 type='text'
-                                value={alapadatok[0]?.nyitvatartasszo || ''}
-                                placeholder={alapadatok[0]?.nyitvatartasszo || ''}
+                                value={updatedData.nyitvatartasszo}
+                                placeholder={nyitvatartasszo}
                                 className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
-                                onChange={(e) => handleInputChange('nyitvatartasszo', e.target.value)}
+                                onChange={e => setUpdatedData(prevData => ({
+                                    ...prevData,
+                                    nyitvatartasszo: e.target.value // Update the specific field in the state
+                                }))}
                             />
                         </div>
                         <div>
                             <label htmlFor="vasarnap">Vasárnap</label>
                             <input
                                 type='text'
-                                value={alapadatok[0]?.nyitvatartasv || ''}
-                                placeholder={alapadatok[0]?.nyitvatartasv || ''}
+                                value={updatedData.nyitvatartasv}
+                                placeholder={nyitvatartasv}
                                 className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
-                                onChange={(e) => handleInputChange('nyitvatartasv', e.target.value)}
+                                onChange={e => setUpdatedData(prevData => ({
+                                    ...prevData,
+                                    nyitvatartasv: e.target.value // Update the specific field in the state
+                                }))}
                             />
                         </div>
                         <div>
                             <label htmlFor="vasarnap">Rendelésfelvétel</label>
                             <input
                                 type='text'
-                                value={alapadatok[0]?.rendelesfelvetel || ''}
-                                placeholder={alapadatok[0]?.rendelesfelvetel || ''}
+                                value={updatedData.rendelesfelvetel}
+                                placeholder={rendelesfelvetel}
                                 className='p-2 w-full transition-all bg-neutral-100 focus:bg-green-300'
-                                onChange={(e) => handleInputChange('rendelesfelvetel', e.target.value)}
+                                onChange={e => setUpdatedData(prevData => ({
+                                    ...prevData,
+                                    rendelesfelvetel: e.target.value // Update the specific field in the state
+                                }))}
                             />
                         </div>
                     </div>
@@ -190,5 +184,3 @@ const Alapadatok = () => {
     </section>
   )
 }
-
-export default Alapadatok;

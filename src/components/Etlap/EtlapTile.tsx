@@ -116,8 +116,9 @@ export default function Etlaptile({ id, nev, kategoria, elsodlegesar, masodlagos
 
   return (
     <section className='flex flex-col w-full h-auto shadow-box p-8 rounded-xl'>
-        <div className='flex justify-between items-center w-full h-full border-b border-neutral-300'>
+        <div className='flex flex-col lg:flex-row justify-start gap-4 items-start lg:items-end w-full h-full border-b border-neutral-300'>
             <h1>{nev}</h1>
+            <p className="py-1 px-2 mb-1 bg-neutral-100 rounded-full min-w-fit ">{updatedData.kategoria}</p>
         </div>
         <div className='flex flex-col gap-4 py-8'>
             <div className='flex flex-col items-start'>
