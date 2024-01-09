@@ -83,6 +83,24 @@ interface RendelesTileProps {
             } else {
                 toast.error('A frissítés nem sikerült');
             }
+            
+            const ugyfelemail = await fetch("https://peboetterem-online-rendeles.vercel.app/api/email/elkeszult", {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    nev: data.formData.nev,
+                    email: data.formData.email,
+                }),
+            });
+
+            if (ugyfelemail.ok) {
+                console.log('Sikeres email');
+            } else {
+                console.log('nem sikerult email');
+            }
+
         } catch (error) {
             console.error('Error updating data:', error);
         }
@@ -112,6 +130,25 @@ interface RendelesTileProps {
             } else {
                 toast.error('A frissítés nem sikerült');
             }
+
+
+            const ugyfelkiszallitva = await fetch("https://peboetterem-online-rendeles.vercel.app/api/email/kiszallitva", {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    nev: data.formData.nev,
+                    email: data.formData.email,
+                }),
+            });
+
+            if (ugyfelkiszallitva.ok) {
+                console.log('Sikeres email');
+            } else {
+                console.log('nem sikerult email');
+            }
+
         } catch (error) {
             console.error('Error updating data:', error);
         }
@@ -192,7 +229,7 @@ interface RendelesTileProps {
                         <div key={index} className='flex items-center justify-between w-full gap-4 border-b border-neutral-200'>
                             <div className="flex flex-row gap-2">
                                 <p className="min-w-max">{cartItem.count} x</p>
-                                <p>{data.cartItems[index].nev}</p>
+                                <p>{data.cartItems[index].nev}({data.cartItems[index].elsoelotag})</p>
                             </div>
                             
                             <p className="font-bold min-w-max">{String(Number(data.cartItems[index].elsodlegesar) * cartItem.count)}</p>                            
