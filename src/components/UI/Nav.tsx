@@ -40,7 +40,7 @@ export default function Nav() {
               <Link href='/oldal-szerkesztese'><li className={buttonClasses('button1Clicked')} onClick={() => handleButtonClick('button1Clicked')}>Oldal szerkesztése</li></Link>
               <Link href='/napimenu'><li className={buttonClasses('button2Clicked')} onClick={() => handleButtonClick('button2Clicked')}>Napi menü</li></Link>
               <Link href='/etlap'><li className={buttonClasses('button3Clicked')} onClick={() => handleButtonClick('button3Clicked')}>Étlap</li></Link>
-              <li className={buttonClasses('button4Clicked')} onClick={() => handleButtonClick('button4Clicked')}>Rendelések</li>
+              <Link href='/rendelesek'><li className={buttonClasses('button4Clicked')} onClick={() => handleButtonClick('button4Clicked')}>Rendelések</li></Link>
             </ul>
           </div>
           <div className='flex justify-end items-center gap-4 w-60 p-4'>
