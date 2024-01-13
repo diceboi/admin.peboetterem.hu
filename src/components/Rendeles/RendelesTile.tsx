@@ -22,13 +22,19 @@ interface RendelesTileProps {
         telepules: string;
         utca: string;
         emelet: string;
+        fizetesi: {
+            keszpenz: boolean,
+            bankkartya: boolean,
+            szepkartya: boolean,
+        },
         megjegyzes: string;
         adatkezelesi: boolean
       };
       cartItems: {
         count: number,
-        elsodlegesar: string;
-        masodlagosar: string;
+        tipus: number,
+        elsodlegesar: number;
+        masodlagosar: number;
         nev: string;
         _id: string;
         allergenek: string;
@@ -42,6 +48,7 @@ interface RendelesTileProps {
   const RendelesTile: React.FC<RendelesTileProps> = ({ data }) => {
 
     const id = data._id;
+    console.log(data)
 
     const [updatedData, setUpdatedData] = useState({
         kiszallitva: data.kiszallitva,
@@ -54,63 +61,10 @@ interface RendelesTileProps {
         setOpenRendeles(prevState => !prevState);
     };
 
-    const totalPrice = data.cartItems.reduce((total, cartItem) => {
-        const itemPrice = Number(cartItem.elsodlegesar) * cartItem.count;
-        return total + itemPrice;
-    }, 0);
-
-    const handleElkeszult = async () => {
-
-        setUpdatedData({
-            kiszallitva: false,
-            elkeszult: true,
-          });
-
-        try {
-            const res = await fetch(`/api/updateRendelesek/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            },
-            body: JSON.stringify({
-                kiszallitva: false,
-                elkeszult: true,
-              }),
-            });
-
-            if (res.ok) {
-                toast.success('Sikeres frissítés');
-            } else {
-                toast.error('A frissítés nem sikerült');
-            }
-            
-            const ugyfelemail = await fetch("https://peboetterem-online-rendeles.vercel.app/api/email/elkeszult", {
-                method: "POST",
-                headers: {
-                "Content-Type": "application/json",
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-                },
-                body: JSON.stringify({
-                    nev: data.formData.nev,
-                    email: data.formData.email,
-                }),
-            });
-
-            if (ugyfelemail.ok) {
-                console.log('Sikeres email');
-            } else {
-                console.log('nem sikerult email');
-            }
-
-        } catch (error) {
-            console.error('Error updating data:', error);
-        }
-    };
+    const totalPrice = data.cartItems?.reduce((accumulator: number, currentItem: any) => {
+        const itemPrice = currentItem.tipus === 0 ? currentItem.elsodlegesar : currentItem.masodlagosar;
+        return accumulator + itemPrice * currentItem.count;
+      }, 0);
 
     const handleKiszallitva = async () => {
 
@@ -138,7 +92,7 @@ interface RendelesTileProps {
             }
 
 
-            const ugyfelkiszallitva = await fetch("https://peboetterem-online-rendeles.vercel.app/api/email/kiszallitva", {
+            const ugyfelkiszallitva = await fetch("/api/email/kiszallitva", {
                 method: "POST",
                 headers: {
                 "Content-Type": "application/json",
@@ -161,19 +115,16 @@ interface RendelesTileProps {
     };
 
   return (
-    <section className={`group flex flex-col w-full h-auto shadow-box p-8 rounded-xl overflow-hidden border-l-8 ${data.elkeszult ? ('border-green-700') : data.kiszallitva ? ('border-gray-200') : ('border-[--alert]')}`}>
+    <section className={`group flex flex-col w-full h-auto shadow-box p-8 rounded-xl overflow-hidden border-l-8 ${data.kiszallitva ? ('border-green-700') : ('border-[--alert]')}`}>
         <button className='flex flex-col lg:flex-row justify-between w-full h-full z-50 ' onClick={toggleRendeles}>
             <div className="flex flex-col-reverse lg:flex-row items-start gap-2">
                 <h1>{data.formData.nev} - {data.formData.telepules}</h1>
 
                 {
-                data.elkeszult ? (
-                    <p className="px-2 py-1 bg-green-700 text-white text-xl font-bebas rounded-md">Elkészült</p>
-                ) : data.kiszallitva ? (
-                    <p className="px-2 py-1 bg-gray-200 text-white text-xl font-bebas rounded-md">Kiszállítva</p>
-                ) : (
-                    <p className="px-2 py-1 bg-[--alert] text-white text-xl font-bebas rounded-md">Új rendelés</p>
-                )
+                data.kiszallitva ?
+                 <p className="px-2 py-1 bg-green-700 text-white text-xl font-bebas rounded-md">Kiszállítva</p> 
+                 : 
+                 <p className="px-2 py-1 bg-[--alert] text-white text-xl font-bebas rounded-md">Új rendelés</p>
                 }
 
             </div>
@@ -218,6 +169,14 @@ interface RendelesTileProps {
                             <p className=" font-bold">{data.formData.emelet}</p>
                         </div>
                         <div className='flex items-center w-full gap-4'>
+                            <p>Fizetési mód:</p>
+                            <p className=" font-bold">
+                                {data.formData.fizetesi?.keszpenz && 'Készpénz'}
+                                {data.formData.fizetesi?.bankkartya && 'Bankkártya'}
+                                {data.formData.fizetesi?.szepkartya && 'Szépkártya'}
+                            </p>
+                        </div>
+                        <div className='flex items-center w-full gap-4'>
                             <p>Megjegyzés:</p>
                             <p className=" font-bold">{data.formData.megjegyzes}</p>
                         </div>
@@ -230,15 +189,28 @@ interface RendelesTileProps {
 
                 <div className="flex flex-col w-full lg:flex-nowrap gap-2 py-4">
 
-                    {data.cartItems.map((cartItem, index) => (
+                    {data.cartItems?.map((cartItem, index) => (
                         
                         <div key={index} className='flex items-center justify-between w-full gap-4 border-b border-neutral-200'>
                             <div className="flex flex-row gap-2">
-                                <p className="min-w-max">{cartItem.count} x</p>
-                                <p>{data.cartItems[index].nev}({data.cartItems[index].elsoelotag})</p>
+                                <p className="min-w-max">
+                                    {cartItem.elsoelotag && cartItem.tipus === 0 ? (
+                                    <>
+                                        {cartItem.count + ' x ' + cartItem.nev + `(${cartItem.elsoelotag})`}
+                                    </>
+                                    ) : cartItem.tipus === 1 ? (
+                                    <>
+                                        {cartItem.count + ' x ' + cartItem.nev + `(${cartItem.masodikelotag})`}
+                                    </>
+                                    ) : (
+                                    <>
+                                        {cartItem.count + ' x ' + cartItem.nev}
+                                    </>
+                                    )}    
+                                </p>
                             </div>
                             
-                            <p className="font-bold min-w-max">{String(Number(data.cartItems[index].elsodlegesar) * cartItem.count)}</p>                            
+                            <p className="font-bold min-w-max">{cartItem.tipus === 0 ? cartItem.elsodlegesar * cartItem.count : cartItem.masodlagosar * cartItem.count} Ft</p>                            
                         </div>
  
                     ))}
@@ -257,13 +229,7 @@ interface RendelesTileProps {
 
 
                 {
-                data.elkeszult ? (
-                    <KiszallitvaButton buttontxt={"Kiszállítva"} onClick={handleKiszallitva} />
-                ) : data.kiszallitva ? (
-                    ''
-                ) : (
-                    <ElkeszultButton buttontxt={"Elkészült"} onClick={handleElkeszult} />
-                )
+                data.kiszallitva ? '' : <KiszallitvaButton buttontxt={"Kiszállítva"} onClick={handleKiszallitva} />
                 }
 
 

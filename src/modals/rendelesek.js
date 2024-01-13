@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const RendelesekSchema = new mongoose.Schema(
-  {
+  { 
     elkeszult: Boolean,
     kiszallitva: Boolean,
     formData: {
@@ -12,12 +12,18 @@ const RendelesekSchema = new mongoose.Schema(
       telepules: String,
       utca: String,
       emelet: String,
+      fizetesi: {
+        keszpenz: Boolean,
+        bankkartya: Boolean,
+        szepkartya: Boolean,
+      },
       megjegyzes: String,
       adatkezelesi: Boolean,
     },
     cartItems: [
       {
         count: Number,
+        tipus: Number,
         elsodlegesar: String,
         masodlagosar: String,
         nev: String,
