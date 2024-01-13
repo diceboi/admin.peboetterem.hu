@@ -177,7 +177,7 @@ interface RendelesTileProps {
                 }
 
             </div>
-            <div className="flex flex-col gap-1">
+            <div className="flex items-start flex-col gap-1">
                 <p className="text-xs">Azonosító: {data._id}</p>
                 <p className="text-xs">Rendelés időpontja: {data.createdAt}</p>
             </div>
@@ -186,7 +186,7 @@ interface RendelesTileProps {
             </div>          
         </button>
         <div className={`${openRendeles ? 'flex flex-col gap-4 transition-all z-0 border-t border-neutral-300 mt-8' : 'flex-col gap-4 transition-all z-0 border hidden'}`}>
-            <div className='flex flex-row items-start'>
+            <div className='flex flex-col lg:flex-row items-start'>
                 <div className="flex items-start flex-wrap w-full lg:flex-nowrap py-4">
                     <div className="grid grid-cols-1 gap-2 w-full">
                         <div className='flex items-center w-full gap-4'>

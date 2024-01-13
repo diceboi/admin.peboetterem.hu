@@ -1,15 +1,15 @@
-import Rendelesek from "@/components/Rendeles/Rendelesek"
+import LoginForm from "@/components/UI/LoginForm"
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 
-export default async function RendelesekPage() {
+export default async function Login() {
 
   const session = await getServerSession(authOptions);
 
-  if (!session) redirect('/login')
+  if (session) redirect('/rendelesek');
 
   return (
-    <Rendelesek />
+    <LoginForm />
   )
 }

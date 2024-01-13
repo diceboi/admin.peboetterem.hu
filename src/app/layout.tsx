@@ -5,6 +5,7 @@ import { ApolloWrapper } from '@/lib/apollo-wrapper'
 import { Toaster } from 'sonner';
 
 import Nav from '@/components/UI/Nav'
+import { AuthProvider } from './providers';
 
 const bebasNeue = Bebas_Neue({ 
   subsets: ['latin'], 
@@ -37,11 +38,13 @@ export default function RootLayout({
     <html lang="en">
       <ApolloWrapper>
       <body className={`${bebasNeue.variable} ${inter.variable} ${playball.variable}`}>
-        <div className='w-max-full'>
-          <Nav />
-          {children}
-          <Toaster richColors position="top-center" />
-        </div>
+        <AuthProvider>
+          <div className='w-max-full'>
+            <Nav />
+            {children}
+            <Toaster richColors position="top-center" />
+          </div>
+        </AuthProvider>
       </body>
       </ApolloWrapper>
     </html>
