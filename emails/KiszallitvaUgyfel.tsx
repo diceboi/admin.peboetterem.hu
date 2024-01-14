@@ -22,7 +22,7 @@ import {
       <Body style={main}>
         <Container style={container}>
           <Img src='https://peboetterem-online-rendeles.vercel.app/_next/image?url=%2Fpebo-hero-logo.png&w=384&q=75' style={{ width: '150px', height: 'auto', margin: 'auto', paddingTop: '20px' }} />
-          <Heading style={{...h1, textAlign: 'center'}}>Kedves {nev}, rendeléseded átadtuk a futárnak.</Heading>
+          <Heading style={{...h1, textAlign: 'center'}}>Kedves {nev}, rendelésedet átadtuk a futárnak.</Heading>
           <Text style={{ ...text, marginBottom: '24px'}}>
             Az email megérkezését követően várhatóan  kb. 10-15 perc múlva megérkezik a rendelésed.
           </Text>
