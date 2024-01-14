@@ -138,8 +138,8 @@ interface RendelesTileProps {
         </button>
         <div className={`${openRendeles ? 'flex flex-col gap-4 transition-all z-0 border-t border-neutral-300 mt-8' : 'flex-col gap-4 transition-all z-0 border hidden'}`}>
             <div className='flex flex-col lg:flex-row items-start'>
-                <div className="flex items-start flex-wrap w-full lg:flex-nowrap py-4">
-                    <div className="grid grid-cols-1 gap-2 w-full">
+                <div className="flex items-start flex-wrap w-full lg:w-1/2 lg:flex-nowrap py-4">
+                    <div className="grid grid-cols-1 gap-2 w-full ">
                         <div className='flex items-center w-full gap-4'>
                             <p>Név:</p>
                             <p className=" font-bold">{data.formData.nev}</p>
@@ -187,13 +187,13 @@ interface RendelesTileProps {
                     </div>
                 </div>
 
-                <div className="flex flex-col w-full lg:flex-nowrap gap-2 py-4">
+                <div className="flex flex-col w-full lg:w-1/2 lg:flex-nowrap gap-2 py-4">
 
                     {data.cartItems?.map((cartItem, index) => (
                         
-                        <div key={index} className='flex items-center justify-between w-full gap-4 border-b border-neutral-200'>
+                        <div key={index} className='flex items-end justify-between w-full gap-4 border-b border-neutral-200'>
                             <div className="flex flex-row gap-2">
-                                <p className="min-w-max">
+                                <p className="">
                                     {cartItem.elsoelotag && cartItem.tipus === 0 ? (
                                     <>
                                         {cartItem.count + ' x ' + cartItem.nev + `(${cartItem.elsoelotag})`}
