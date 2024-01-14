@@ -16,9 +16,14 @@ export default function Nav() {
   const [rendelesek, setRendelesek] = useState<any[]>([]);
   const [rendelescount, setRendelesCount] = useState(0);
   const [prevRendelesCount, setPrevRendelesCount] = useState(0);
+  const [newOrderSound, setNewOrderSound] = useState<HTMLAudioElement | null>(null);
 
-  // Audio element for playing sound
-  const newOrderSound = new Audio('/newrendeles.mp3');
+  useEffect(() => {
+    // Initialize Audio object client-side
+    if (typeof window !== 'undefined') {
+      setNewOrderSound(new Audio('/newrendeles.mp3'));
+    }
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -31,8 +36,10 @@ export default function Nav() {
 
       // Check if new orders have been received
       if (notDeliveredOrders.length > prevRendelesCount) {
-        // Play the sound for new orders
-        newOrderSound.play();
+        // Check that newOrderSound is not null before trying to call play()
+        if (newOrderSound) {
+          newOrderSound.play();
+        }
       }
 
       setRendelesek(notDeliveredOrders);
