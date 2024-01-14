@@ -6,6 +6,7 @@ import { Toaster } from 'sonner';
 
 import Nav from '@/components/UI/Nav'
 import { AuthProvider } from './providers';
+import OrdersProvider from '@/OrderContext';
 
 const bebasNeue = Bebas_Neue({ 
   subsets: ['latin'], 
@@ -37,15 +38,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ApolloWrapper>
-      <body className={`${bebasNeue.variable} ${inter.variable} ${playball.variable}`}>
-        <AuthProvider>
-          <div className='w-max-full'>
-            <Nav />
-            {children}
-            <Toaster richColors position="top-center" />
-          </div>
-        </AuthProvider>
-      </body>
+        <OrdersProvider >
+          <body className={`${bebasNeue.variable} ${inter.variable} ${playball.variable}`}>
+            <AuthProvider>
+              <div className='w-max-full'>
+                <Nav />
+                {children}
+                <Toaster richColors position="top-center" />
+              </div>
+            </AuthProvider>
+          </body>
+        </OrdersProvider>
       </ApolloWrapper>
     </html>
   )

@@ -7,8 +7,49 @@ import { signOut, useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation'
 
 export default function Nav() {
+
   const pathName = usePathname();
   const { data: session } = useSession();
+
+  // Fetch order data
+
+  const [rendelesek, setRendelesek] = useState<any[]>([]);
+  const [rendelescount, setRendelesCount] = useState(0);
+  const [prevRendelesCount, setPrevRendelesCount] = useState(0);
+
+  // Audio element for playing sound
+  const newOrderSound = new Audio('/newrendeles.mp3');
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch('/api/rendelesek');
+      if (!res.ok) {
+        throw new Error('Az adatok letöltése nem sikerült');
+      }
+      const data = await res.json();
+      const notDeliveredOrders = data.data.Rendelesek.filter((order: any) => !order.kiszallitva);
+
+      // Check if new orders have been received
+      if (notDeliveredOrders.length > prevRendelesCount) {
+        // Play the sound for new orders
+        newOrderSound.play();
+      }
+
+      setRendelesek(notDeliveredOrders);
+      setPrevRendelesCount(notDeliveredOrders.length); // Update previous count
+      setRendelesCount(notDeliveredOrders.length);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchData();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [rendelesek.length]);
 
   // Add index signature to allow dynamic access
   const initialButtonStates: { [key: string]: boolean } = {
@@ -62,7 +103,7 @@ export default function Nav() {
               <Link href='/oldal-szerkesztese'><li className={buttonClasses('button1Clicked')} onClick={() => handleButtonClick('button1Clicked')}>Oldal szerkesztése</li></Link>
               <Link href='/napimenu'><li className={buttonClasses('button2Clicked')} onClick={() => handleButtonClick('button2Clicked')}>Napi menü</li></Link>
               <Link href='/etlap'><li className={buttonClasses('button3Clicked')} onClick={() => handleButtonClick('button3Clicked')}>Étlap</li></Link>
-              <Link href='/rendelesek'><li className={buttonClasses('button4Clicked')} onClick={() => handleButtonClick('button4Clicked')}>Rendelések</li></Link>
+              <Link href='/rendelesek' className='relative'><span className={rendelescount === 0 ? `absolute text-sm text-white px-2 py-1 -top-3 -right-3 bg-green-700 rounded-full` : `absolute text-sm text-white px-2 py-1 -top-3 -right-3 bg-[--alert] rounded-full`}>{rendelescount}</span><li className={buttonClasses('button4Clicked')} onClick={() => handleButtonClick('button4Clicked')}>Rendelések</li></Link>
             </ul>
           </div>
           <div className='flex justify-end items-center gap-4 w-60 p-4'>
