@@ -13,7 +13,7 @@ export default function NapimenuAdatok({ id, amenuar, bmenuar, amenucsakfoetel, 
         amenucsakfoetel,
         bmenucsakfoetel,
         menurendeles,
-        menukiszallitas
+        menukiszallitas,
         });
 
     const handleSave = async () => {

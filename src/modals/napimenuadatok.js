@@ -8,6 +8,10 @@ const NapimenuadatokSchema = new mongoose.Schema(
     bmenucsakfoetel: String,
     menurendeles: String,
     menukiszallitas: String,
+    amenuelfogyott: Boolean,
+    bmenuelfogyott: Boolean,
+    amenuleveselfogyott: Boolean,
+    bmenuleveselfogyott: Boolean,
   },
   {
     timestamps: true,
