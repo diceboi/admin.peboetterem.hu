@@ -114,6 +114,9 @@ interface RendelesTileProps {
         }
     };
 
+    const createdAtUTC = new Date(data.createdAt);
+    const createdAtLocal = createdAtUTC.toLocaleString("hu-HU", { timeZone: "Europe/Budapest" });
+
   return (
     <section className={`group flex flex-col w-full h-auto shadow-box p-8 rounded-xl overflow-hidden border-l-8 ${data.kiszallitva ? ('border-green-700') : ('border-[--alert]')}`}>
         <button className='flex flex-col lg:flex-row justify-between w-full h-full z-50 ' onClick={toggleRendeles}>
@@ -130,7 +133,7 @@ interface RendelesTileProps {
             </div>
             <div className="flex items-start flex-col gap-1">
                 <p className="text-xs">Azonosító: {data._id}</p>
-                <p className="text-xs">Rendelés időpontja: {data.createdAt}</p>
+                <p className="text-xs">Rendelés időpontja: {createdAtLocal}</p>
             </div>
             <div className="flex justify-center items-center">
                 {openRendeles ? <TbChevronUp /> : <TbChevronDown />}
