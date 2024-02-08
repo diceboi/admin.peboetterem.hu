@@ -202,7 +202,7 @@ export default function Rendelesek() {
         <button onClick={handlePageChange(page + 1)} className='flex flex-nowrap items-center py-1 px-2 border hover:border-black hover:bg-black hover:text-white rounded-full transition-all'>Következő oldal <GrFormNext /></button>
       </div>
 
-      {rendelesek.slice().reverse().map((rendelesekData, index) => (
+      {rendelesek.slice().map((rendelesekData, index) => (
         <RendelesTile 
         key={index} 
         data={rendelesekData}
