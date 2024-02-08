@@ -1,7 +1,8 @@
 "use client"
 
 import RendelesTile from '@/components/Rendeles/RendelesTile'
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
+import { GrFormNext, GrFormPrevious } from 'react-icons/gr'
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 
@@ -22,6 +23,9 @@ const getNapimenuadatok = async () => {
 
 export default function Rendelesek() {
 
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+
   const [rendelesek, setRendelesek] = useState<any[]>([]);
   const [napimenuadatok, setNapimenuadatok] = useState<any[]>([]);
   const [amenutoggle, setAmenuToggle] = useState(false);
@@ -40,26 +44,42 @@ export default function Rendelesek() {
   const toggleAmenuLeves = () => setAmenuLevesToggle(prevState => !prevState);
   const toggleBmenuLeves = () => setBmenuLevesToggle(prevState => !prevState);
 
-  const fetchData = async () => {
+  const fetchData = async (pageNumber = page) => {
     try {
-      const res = await fetch('/api/rendelesek');
+      const res = await fetch(`/api/rendelesek?page=${pageNumber}&pageSize=${pageSize}`);
       if (!res.ok) {
         throw new Error('Az adatok letöltése nem sikerült');
       }
       const data = await res.json();
       setRendelesek(data.data.Rendelesek);
+      // Handle updating pagination state here if necessary
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchData();
-    }, 5000); // Polling every 5 seconds, adjust as needed
+    let isMounted = true;
 
-    return () => clearInterval(interval);
+    fetchData(); // Fetch data when component mounts
+
+    const interval = setInterval(() => {
+      if (isMounted) {
+        fetchData(); // Fetch data periodically
+      }
+    }, 60000);
+
+    return () => {
+      isMounted = false; // Cleanup to avoid updating state on an unmounted component
+      clearInterval(interval);
+    };
   }, []);
+
+  const handlePageChange = (newPage: any) => () => {
+    fetchData(newPage);
+    setPage(newPage);
+    // Scroll to the top or to a specific element if required
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -176,6 +196,12 @@ export default function Rendelesek() {
 
       <div className='flex flex-col gap-8'>
 
+      <div className="flex flex-nowrap justify-between py-4">
+        {/* You can add Previous Page and Next Page buttons here */}
+        <button onClick={handlePageChange(page - 1)} disabled={page === 1} className='flex flex-nowrap items-center py-1 px-2 border hover:border-black hover:bg-black hover:text-white rounded-full transition-all'><GrFormPrevious /> Előző oldal</button>
+        <button onClick={handlePageChange(page + 1)} className='flex flex-nowrap items-center py-1 px-2 border hover:border-black hover:bg-black hover:text-white rounded-full transition-all'>Következő oldal <GrFormNext /></button>
+      </div>
+
       {rendelesek.slice().reverse().map((rendelesekData, index) => (
         <RendelesTile 
         key={index} 
@@ -183,6 +209,11 @@ export default function Rendelesek() {
         />
       ))}
 
+      </div>
+      <div className="flex flex-nowrap justify-between py-8">
+        {/* You can add Previous Page and Next Page buttons here */}
+        <button onClick={handlePageChange(page - 1)} disabled={page === 1} className='flex flex-nowrap items-center py-1 px-2 border hover:border-black hover:bg-black hover:text-white rounded-full transition-all'><GrFormPrevious /> Előző oldal</button>
+        <button onClick={handlePageChange(page + 1)} className='flex flex-nowrap items-center py-1 px-2 border hover:border-black hover:bg-black hover:text-white rounded-full transition-all'>Következő oldal <GrFormNext /></button>
       </div>
     </section>
   )

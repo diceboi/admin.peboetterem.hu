@@ -48,7 +48,6 @@ interface RendelesTileProps {
   const RendelesTile: React.FC<RendelesTileProps> = ({ data }) => {
 
     const id = data._id;
-    console.log(data)
 
     const [updatedData, setUpdatedData] = useState({
         kiszallitva: data.kiszallitva,
